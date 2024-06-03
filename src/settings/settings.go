@@ -39,6 +39,15 @@ func (settings *Settings) verifyOutputPath() (err error) {
 
 	info, err := os.Stat(settings.OutputFilePath)
 
+	if os.IsNotExist(err) {
+		file, err2 := os.Create(settings.OutputFilePath)
+   		if err2 != nil {
+			return fmt.Errorf("Could not create output file %s", settings.OutputFilePath)
+   		}
+   		defer file.Close()
+		return err2
+	}
+
 	if info.Mode().IsDir() {
 		return fmt.Errorf("Output file %s is a directory", settings.OutputFilePath)
 	}
