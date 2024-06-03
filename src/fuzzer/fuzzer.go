@@ -9,50 +9,67 @@ import (
 )
 
 func FuzzFromFile(args *settings.Settings) {
-	file, err := os.Open(args.InputFilePath)
-		if err != nil {
-			fmt.Println("Error opening file %s: %s", args.InputFilePath, err)
-			os.Exit(1)
-		}
-		defer file.Close()
+	inputFile, err := os.Open(args.InputFilePath)
 
-		scanner := bufio.NewScanner(file)
-		for scanner.Scan() {
-			line := scanner.Text()
-			parts := strings.Split(line, ".")
-			if len(parts) != 2 {
-				//fmt.Printf("Invalid format: %s\n", line)
-				continue
-			}
-			name := parts[0]
-			surname := parts[1]
-			usernames := generateUsernames(name, surname)
-			for _, username := range usernames {
-				fmt.Println(username)
-			}
+	if err != nil {
+		fmt.Printf("Error opening file %s: %s\n", args.InputFilePath, err)
+		os.Exit(1)
+	}
+	defer inputFile.Close()
+
+	outputFile, err := os.Create(args.OutputFilePath)
+
+	if err != nil {
+		fmt.Printf("Error opening file %s: %s\n", args.OutputFilePath, err)
+		os.Exit(1)
+	}
+	defer outputFile.Close()
+
+	scanner := bufio.NewScanner(inputFile)
+	for scanner.Scan() {
+		line := scanner.Text()
+		parts := strings.Split(line, ".")
+		if len(parts) != 2 {
+			//fmt.Printf("Invalid format: %s\n", line)
+			continue
 		}
+		name := parts[0]
+		surname := parts[1]
+		usernames := generateUsernames(name, surname)
+		for _, username := range usernames {
+			outputFile.WriteString(username+"\n")
+		}
+	}
 }
 
 func FuzzFromCommon(args *settings.Settings) {
-	file, err := os.Open(args.InputFilePath)
-		if err != nil {
-			fmt.Println("Error opening file %s: %s", args.InputFilePath, err)
-			os.Exit(1)
-		}
+	inputFile, err := os.Open(args.InputFilePath)
 
-		defer file.Close()
+	if err != nil {
+		fmt.Printf("Error opening file %s: %s\n", args.InputFilePath, err)
+		os.Exit(1)
+	}
+	defer inputFile.Close()
 
-		var commonNames []string
-		scanner := bufio.NewScanner(file)
-		for scanner.Scan() {
-			line := scanner.Text()
-			commonNames = append(commonNames, line)
-		}
-		
-		permutations := generateAllPermutations(commonNames)
-		for _, username := range permutations {
-			fmt.Println(username)
-		}
+	outputFile, err := os.Create(args.OutputFilePath)
+
+	if err != nil {
+		fmt.Printf("Error opening file %s: %s\n", args.OutputFilePath, err)
+		os.Exit(1)
+	}
+	defer outputFile.Close()
+
+	var commonNames []string
+	scanner := bufio.NewScanner(inputFile)
+	for scanner.Scan() {
+		line := scanner.Text()
+		commonNames = append(commonNames, line)
+	}
+	
+	permutations := generateAllPermutations(commonNames)
+	for _, username := range permutations {
+		outputFile.WriteString(username+"\n")
+	}
 }
 
 func generateUsernames(name, surname string) []string {

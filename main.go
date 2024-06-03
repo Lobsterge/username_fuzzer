@@ -52,10 +52,22 @@ func main() {
 
 		case "italy":
 			args.InputFilePath="data/italy.txt"
+
+			if err := args.Verify(); err != nil {
+				fmt.Printf("An error has occured: %s\n", err)
+				os.Exit(1)
+			}
+
 			fuzzer.FuzzFromCommon(args)
 
 		case "world":
 			args.InputFilePath="data/world.txt"
+
+			if err := args.Verify(); err != nil {
+				fmt.Printf("An error has occured: %s\n", err)
+				os.Exit(1)
+			}
+
 			fuzzer.FuzzFromCommon(args)
 		
 		default:
