@@ -1,5 +1,7 @@
 # Fuzzer di Username
 
+Progetto svolto per il PCTO 2023/2024 presso [Ethical Security SRL](https://www.ethsec.com/) da Ali Husnain e Alessio Ghidini
+
 ## Descrizione del Progetto
 
 Semplice implementazione in linguaggio Go-lang di un tool CLI, progettato per generare possibili pattern di username a partire da una lista di nomi e cognomi.
