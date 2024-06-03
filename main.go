@@ -7,8 +7,8 @@ import (
 	"github.com/Lobsterge/username_fuzzer/src/settings"
 )
 
-func parseSettings() (args *Settings) {
-	args = settings:new()
+func parseSettings() (args *settings.Settings) {
+	args = settings.New()
 
 	flag.StringVar(&args.Command, "command", "", "Your command")
 	flag.StringVar(&args.Command, "c", "", "Your command")
@@ -23,11 +23,13 @@ func parseSettings() (args *Settings) {
 	flag.BoolVar(&args.Help, "h", false, "Help")
 
 	flag.Parse()
+
+	return args
 }
 
 func main() {
 	args := parseSettings()
 
-	fmt.Printf("%s\n%s\n%s\n%d\n", args.Command, args.InputFilePath, args.OutputFilePath, args.Help)
+	fmt.Printf("%s\n%s\n%s\n%t\n", args.Command, args.InputFilePath, args.OutputFilePath, args.Help)
 	os.Exit(0)
 }
