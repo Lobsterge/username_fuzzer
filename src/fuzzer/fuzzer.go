@@ -76,17 +76,37 @@ func generateUsernames(name, surname string) []string {
 	var usernames []string
 	firstLetterName := string(name[0])
 	firstLetterSurname := string(surname[0])
+	uppercaseName := strings.ToUpper(name)
+    uppercaseSurname := strings.ToUpper(surname)
+    lowercaseSurname := strings.ToLower(surname)
 
 	usernames = append(usernames, name+surname)
 	usernames = append(usernames, surname+name)
 	usernames = append(usernames, name+"."+surname)
 	usernames = append(usernames, surname+"."+name)
+	usernames = append(usernames, name+"_"+surname)
+	usernames = append(usernames, surname+"_"+name)
 	usernames = append(usernames, name+"-"+surname)
 	usernames = append(usernames, surname+"-"+name)
 	usernames = append(usernames, name+firstLetterSurname)
 	usernames = append(usernames, surname+firstLetterName)
 	usernames = append(usernames, firstLetterName+surname)
 	usernames = append(usernames, firstLetterSurname+name)
+	usernames = append(usernames, name + firstLetterName + firstLetterSurname + surname)
+	usernames = append(usernames, uppercaseName + uppercaseSurname)
+	usernames = append(usernames, uppercaseName + lowercaseSurname)
+	usernames = append(usernames, strings.Title(name) + " " + strings.Title(surname))
+	usernames = append(usernames, strings.Title(name) + " " + surname)
+	usernames = append(usernames, strings.Title(name) + strings.Title(surname))
+
+	for i := 2; i < 5; i++ {
+		if len(name)>i && len(surname)>i {
+			usernames = append(usernames, name[:i] + surname[:i])
+			usernames = append(usernames, surname[:i] + name[:i])
+		}
+	}
+
+	
 
 	return usernames
 }
