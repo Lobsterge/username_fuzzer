@@ -92,24 +92,41 @@ func generateUsernames(name, surname string) []string {
 }
 
 func generateAllPermutations(names []string) []string {
-	var permutations []string
-	for _, fullName1 := range names {
-		parts1 := strings.Split(fullName1, ".")
-		if len(parts1) != 2 {
-			//fmt.Printf("Invalid format: %s\n", fullName1)
-			continue
-		}
-		name1, surname1 := parts1[0], parts1[1]
-		for _, fullName2 := range names {
-			parts2 := strings.Split(fullName2, ".")
-			if len(parts2) != 2 {
-				//fmt.Printf("Invalid format: %s\n", fullName2)
-				continue
-			}
-			name2, surname2 := parts2[0], parts2[1]
-			permutations = append(permutations, generateUsernames(name1, surname2)...)
-			permutations = append(permutations, generateUsernames(name2, surname1)...)
-		}
-	}
-	return permutations
+    var permutations []string
+    addedPermutations := make(map[string]bool)
+
+    for _, fullName1 := range names {
+        parts1 := strings.Split(fullName1, ".")
+        if len(parts1) != 2 {
+            //fmt.Printf("Invalid format: %s\n", fullName1)
+            continue
+        }
+        name1, surname1 := parts1[0], parts1[1]
+
+        for _, fullName2 := range names {
+            parts2 := strings.Split(fullName2, ".")
+            if len(parts2) != 2 {
+                //fmt.Printf("Invalid format: %s\n", fullName2)
+                continue
+            }
+            name2, surname2 := parts2[0], parts2[1]
+
+            perm1 := generateUsernames(name1, surname2)
+            for _, p := range perm1 {
+                if !addedPermutations[p] {
+                    permutations = append(permutations, p)
+                    addedPermutations[p] = true
+                }
+            }
+
+            perm2 := generateUsernames(name2, surname1)
+            for _, p := range perm2 {
+                if !addedPermutations[p] {
+                    permutations = append(permutations, p)
+                    addedPermutations[p] = true
+                }
+            }
+        }
+    }
+    return permutations
 }
