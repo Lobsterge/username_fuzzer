@@ -28,7 +28,7 @@ Semplice implementazione in linguaggio Go-lang di un tool CLI, progettato per ge
     ```
 
 ## Utilizzo
-```bash
+```
     ./username_fuzzer <flags>
     
     Usage of ./username_fuzzer:
