@@ -23,6 +23,12 @@ func parseSettings() (args *settings.Settings) {
 	flag.BoolVar(&args.Help, "help", false, "Shows the various command line options")
 	flag.BoolVar(&args.Help, "h", false, "-help (shorthand)")
 
+	flag.BoolVar(&args.Permutation, "permutation", false, "Applies a permutation on the list provided by -input")
+	flag.BoolVar(&args.Permutation, "p", false, "-permutation (shorthand)")
+
+	flag.BoolVar(&args.CaseSensitive, "case", false, "Make the usernames case-sensitive, if this flag is not checked they will be all lowercase")
+	flag.BoolVar(&args.CaseSensitive, "cs", false, "-case (shorthand)")
+
 	flag.Parse()
 
 	return args
@@ -48,7 +54,11 @@ func main() {
 				os.Exit(1)
 			}
 
-			fuzzer.FuzzFromFile(args)
+			if args.Permutation {
+				fuzzer.FuzzFromCommon(args)
+			} else {
+				fuzzer.FuzzFromFile(args)
+			}
 
 		case "italy":
 			args.InputFilePath="data/italy.txt"

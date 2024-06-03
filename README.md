@@ -34,10 +34,14 @@ Semplice implementazione in linguaggio Go-lang di un tool CLI, progettato per ge
     Usage of ./username_fuzzer:
     -c string
     	-command (shorthand)
+    -case
+    	Make the usernames case-sensitive, if this flag is not checked they will be all lowercase
     -command string
     	file -> generates usernames from input file
     	italy -> generates usernames from the most common names in Italy
     	world -> generates usernames from the most common names globally
+    -cs
+    	-case (shorthand)
     -h	-help (shorthand)
     -help
     	Shows the various command line options
@@ -49,4 +53,8 @@ Semplice implementazione in linguaggio Go-lang di un tool CLI, progettato per ge
     	-output (shorthand) (default "output.txt")
     -output string
     	Path of the output file (default "output.txt")
+    -p	-permutation (shorthand)
+    -permutation
+    	Applies a permutation on the list provided by -input
+
 ```

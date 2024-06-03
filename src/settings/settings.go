@@ -10,6 +10,8 @@ type Settings struct {
 	InputFilePath string
 	OutputFilePath string
 	Help bool
+	CaseSensitive bool
+	Permutation bool
 }
 
 func New() *Settings {
@@ -18,6 +20,8 @@ func New() *Settings {
 		InputFilePath: "",
 		OutputFilePath: "",
 		Help: false,
+		Permutation: false,
+		CaseSensitive: false,
 	}
 }
 

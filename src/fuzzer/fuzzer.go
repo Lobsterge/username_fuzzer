@@ -35,9 +35,13 @@ func FuzzFromFile(args *settings.Settings) {
 		}
 		name := parts[0]
 		surname := parts[1]
-		usernames := generateUsernames(name, surname)
+		usernames := generateUsernames(args, name, surname)
 		for _, username := range usernames {
-			outputFile.WriteString(username+"\n")
+			if args.CaseSensitive {
+				outputFile.WriteString(username+"\n")
+			} else {
+				outputFile.WriteString(strings.ToLower(username+"\n"))
+			}
 		}
 	}
 }
@@ -66,13 +70,17 @@ func FuzzFromCommon(args *settings.Settings) {
 		commonNames = append(commonNames, line)
 	}
 	
-	permutations := generateAllPermutations(commonNames)
+	permutations := generateAllPermutations(args, commonNames)
 	for _, username := range permutations {
-		outputFile.WriteString(username+"\n")
+		if args.CaseSensitive {
+			outputFile.WriteString(username+"\n")
+		} else {
+			outputFile.WriteString(strings.ToLower(username+"\n"))
+		}
 	}
 }
 
-func generateUsernames(name, surname string) []string {
+func generateUsernames(args *settings.Settings, name, surname string) []string {
 	var usernames []string
 	firstLetterName := string(name[0])
 	firstLetterSurname := string(surname[0])
@@ -93,11 +101,14 @@ func generateUsernames(name, surname string) []string {
 	usernames = append(usernames, firstLetterName+surname)
 	usernames = append(usernames, firstLetterSurname+name)
 	usernames = append(usernames, name + firstLetterName + firstLetterSurname + surname)
-	usernames = append(usernames, uppercaseName + uppercaseSurname)
-	usernames = append(usernames, uppercaseName + lowercaseSurname)
-	usernames = append(usernames, strings.Title(name) + " " + strings.Title(surname))
-	usernames = append(usernames, strings.Title(name) + " " + surname)
-	usernames = append(usernames, strings.Title(name) + strings.Title(surname))
+
+	if args.CaseSensitive {
+		usernames = append(usernames, uppercaseName + uppercaseSurname)
+		usernames = append(usernames, uppercaseName + lowercaseSurname)
+		usernames = append(usernames, strings.Title(name) + " " + strings.Title(surname))
+		usernames = append(usernames, strings.Title(name) + " " + surname)
+		usernames = append(usernames, strings.Title(name) + strings.Title(surname))
+	}
 
 	for i := 2; i < 5; i++ {
 		if len(name)>i && len(surname)>i {
@@ -106,12 +117,10 @@ func generateUsernames(name, surname string) []string {
 		}
 	}
 
-	
-
 	return usernames
 }
 
-func generateAllPermutations(names []string) []string {
+func generateAllPermutations(args *settings.Settings, names []string) []string {
     var permutations []string
     addedPermutations := make(map[string]bool)
 
@@ -131,7 +140,7 @@ func generateAllPermutations(names []string) []string {
             }
             name2, surname2 := parts2[0], parts2[1]
 
-            perm1 := generateUsernames(name1, surname2)
+            perm1 := generateUsernames(args, name1, surname2)
             for _, p := range perm1 {
                 if !addedPermutations[p] {
                     permutations = append(permutations, p)
@@ -139,7 +148,7 @@ func generateAllPermutations(names []string) []string {
                 }
             }
 
-            perm2 := generateUsernames(name2, surname1)
+            perm2 := generateUsernames(args, name2, surname1)
             for _, p := range perm2 {
                 if !addedPermutations[p] {
                     permutations = append(permutations, p)
