@@ -118,8 +118,8 @@ func FuzzFromFiles(args *settings.Settings) {
 	}
 
 	for _, name := range names {
-        for _, surname := range surnames {
-            usernames := generateUsernames(args, name, surname)
+		for _, surname := range surnames {
+			usernames := generateUsernames(args, name, surname)
 			for _, username := range usernames {
 				if args.CaseSensitive {
 					outputFile.WriteString(username+"\n")

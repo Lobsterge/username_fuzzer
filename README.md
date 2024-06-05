@@ -45,7 +45,8 @@ Semplice implementazione in linguaggio Go-lang di un tool CLI, progettato per ge
     	world -> generates usernames from the most common names globally
     -cs
     	-case (shorthand)
-    -h	-help (shorthand)
+    -h	
+        -help (shorthand)
     -help
     	Shows the various command line options
     -i string
@@ -60,12 +61,13 @@ Semplice implementazione in linguaggio Go-lang di un tool CLI, progettato per ge
     	-output (shorthand) (default "output.txt")
     -output string
     	Path of the output file (default "output.txt")
-    -p	-permutation (shorthand)
+    -p	
+        -permutation (shorthand)
     -permutation
     	Applies a permutation on the list provided by -input
     -s string
     	-surnames (shorthand)
-  - surnames string
+    -surnames string
     	Path of the file containing surnames for permutation
 
 ```
