@@ -80,6 +80,57 @@ func FuzzFromCommon(args *settings.Settings) {
 	}
 }
 
+func FuzzFromFiles(args *settings.Settings) {
+	namesFile, err := os.Open(args.NamesFilePath)
+
+	if err != nil {
+		fmt.Printf("Error opening file %s: %s\n", args.NamesFilePath, err)
+		os.Exit(1)
+	}
+	defer namesFile.Close()
+
+	surnamesFile, err := os.Open(args.SurnamesFilePath)
+
+	if err != nil {
+		fmt.Printf("Error opening file %s: %s\n", args.SurnamesFilePath, err)
+		os.Exit(1)
+	}
+	defer surnamesFile.Close()
+
+	outputFile, err := os.Create(args.OutputFilePath)
+
+	if err != nil {
+		fmt.Printf("Error opening file %s: %s\n", args.OutputFilePath, err)
+		os.Exit(1)
+	}
+	defer outputFile.Close()
+
+	var names, surnames []string
+
+	scanner := bufio.NewScanner(namesFile)
+	for scanner.Scan() {
+		names = append(names, scanner.Text())
+	}
+
+	scanner = bufio.NewScanner(surnamesFile)
+	for scanner.Scan() {
+		surnames = append(surnames, scanner.Text())
+	}
+
+	for _, name := range names {
+        for _, surname := range surnames {
+            usernames := generateUsernames(args, name, surname)
+			for _, username := range usernames {
+				if args.CaseSensitive {
+					outputFile.WriteString(username+"\n")
+				} else {
+					outputFile.WriteString(strings.ToLower(username+"\n"))
+				}
+			}
+        }
+    }
+}
+
 func generateUsernames(args *settings.Settings, name, surname string) []string {
 	var usernames []string
 	firstLetterName := string(name[0])
