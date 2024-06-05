@@ -11,7 +11,7 @@ import (
 func parseSettings() (args *settings.Settings) {
 	args = settings.New()
 
-	flag.StringVar(&args.Command, "command", "", "file -> generates usernames from input file\nitaly -> generates usernames from the most common names in Italy\nworld -> generates usernames from the most common names globally")
+	flag.StringVar(&args.Command, "command", "", "file -> generates usernames from input file\nseparate -> generates usernames from a names and surnames files\nitaly -> generates usernames from the most common names in Italy\nworld -> generates usernames from the most common names globally")
 	flag.StringVar(&args.Command, "c", "", "-command (shorthand)")
 
 	flag.StringVar(&args.OutputFilePath, "output", "output.txt", "Path of the output file")
@@ -28,6 +28,12 @@ func parseSettings() (args *settings.Settings) {
 
 	flag.BoolVar(&args.CaseSensitive, "case", false, "Make the usernames case-sensitive, if this flag is not checked they will be all lowercase")
 	flag.BoolVar(&args.CaseSensitive, "cs", false, "-case (shorthand)")
+
+	flag.StringVar(&args.NamesFilePath, "names", "", "Path of the file containing names for permutation")
+	flag.StringVar(&args.NamesFilePath, "n", "", "-names (shorthand)")
+
+	flag.StringVar(&args.SurnamesFilePath, "surnames", "", "Path of the file containing surnames for permutation")
+	flag.StringVar(&args.SurnamesFilePath, "s", "", "-surnames (shorthand)")
 
 	flag.Parse()
 
@@ -59,6 +65,19 @@ func main() {
 			} else {
 				fuzzer.FuzzFromFile(args)
 			}
+		
+		case "separate":
+			if args.NamesFilePath == "" || args.SurnamesFilePath == "" {
+				fmt.Println("You have to provide two files to use this mode, use -h for more information")
+				os.Exit(1)
+			}
+
+			if err := args.Verify(); err != nil {
+				fmt.Printf("An error has occured: %s\n", err)
+				os.Exit(1)
+			}
+
+			fuzzer.FuzzFromFiles(args)
 
 		case "italy":
 			args.InputFilePath="data/italy.txt"
