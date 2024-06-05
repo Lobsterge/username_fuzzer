@@ -40,6 +40,7 @@ Semplice implementazione in linguaggio Go-lang di un tool CLI, progettato per ge
     	Make the usernames case-sensitive, if this flag is not checked they will be all lowercase
     -command string
     	file -> generates usernames from input file
+    	separate -> generates usernames from a names and surnames files
     	italy -> generates usernames from the most common names in Italy
     	world -> generates usernames from the most common names globally
     -cs
@@ -51,6 +52,10 @@ Semplice implementazione in linguaggio Go-lang di un tool CLI, progettato per ge
     	-input (shorthand)
     -input string
     	Path of the input file in the format (name.surname)
+    -n string
+    	-names (shorthand)
+    -names string
+    	Path of the file containing names for permutation
     -o string
     	-output (shorthand) (default "output.txt")
     -output string
@@ -58,5 +63,9 @@ Semplice implementazione in linguaggio Go-lang di un tool CLI, progettato per ge
     -p	-permutation (shorthand)
     -permutation
     	Applies a permutation on the list provided by -input
+    -s string
+    	-surnames (shorthand)
+  - surnames string
+    	Path of the file containing surnames for permutation
 
 ```
